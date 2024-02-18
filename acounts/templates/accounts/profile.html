@@ -1,0 +1,67 @@
+{% extends 'base.html' %} 
+{% load static %}
+ {% block head_title %}Banking System{% endblock %}  
+ {% block content %} {% if form.non_field_errors %}
+  {% for error in form.non_field_errors %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-2" role="alert">
+    <p class="font-bold">Error!</p>
+    <p class="block sm:inline">{{ error }}</p>
+</div>
+{% endfor %} {% endif %} {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-2" role="alert">
+    <p class="font-bold">Error!</p>
+    <p class="block sm:inline">{{ error }}</p>
+</div>
+{% endfor %} {% endif %}
+<div class="bg-white px-3 py-4 rounded-xl my-6">
+
+    <p class="font-bold text-3xl text-left ">Account NO: {{request.user.account.account_no}}</p>
+    <p class="font-bold text-3xl text-left pb-5">Name : {{request.user.username}}</p>
+    
+     <a href="{% url 'update_profile' %}" class="btn btn-primary"  >Update Your Profile </a>
+</div>
+
+
+
+<table class="table">
+   <thead>
+     <tr>
+       <th scope="col">Id</th>
+       <th scope="col">Book</th>
+       <th scope="col">Price</th>
+       <th scope="col">Balance After transaction</th>
+       <th scope="col">Date</th>
+       <th scope="col">Return Book</th>
+
+     </tr>
+   </thead>
+   <tbody>
+      {% for books in  borrowing_history %}
+     <tr>
+       <th scope="row">{{ books.book.id }}</th>
+       <td>{{ books.book.title }}</td>
+       <td>{{ books.book.borrowing_price }}</td>
+       <td>{{ books.book.balace_after }}</td>
+       <td>{{ books.purchase_date }}</td>
+       <td> <a href="{% url 'return' id=books.id %}" class="btn btn-primary" >Return </a></td>
+     </tr>
+     {% endfor %}
+      
+   </tbody>
+ </table>
+ 
+ 
+ 
+{% for books in  borrowing_history %}
+
+  <h1>{{ books.book.title }} </h1>
+  <h1>{{ books.purchase_date}} </h1>
+
+{% endfor %}
+
+ 
+      
+      
+    
+ 
+{% endblock %}
