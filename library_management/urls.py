@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from books.views import BookListView, BuyNowView, ReturnView,   DetailbookView  
+from books.views import BookListView, BuyNowView, ReturnView,   DetailbookView, DetailbookView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,11 +25,9 @@ urlpatterns = [
     path('', BookListView.as_view(), name='home'),
     path('category/<slug:category_slug>/', BookListView.as_view(), name='category_wise_book'),
     path('buy/<int:id>/', BuyNowView.as_view(), name='buy'),
-
     path('return/<int:id>/', ReturnView.as_view(), name='return'),
     path('details/<int:id>/', DetailbookView.as_view(), name='details'),
     path('accounts/', include('acounts.urls')),
-    
     path('transaction/', include('transactions.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

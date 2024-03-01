@@ -6,11 +6,13 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from .models import Book, BorroBook, Category, Review
 from acounts.models import UserBankAccount
-from .forms import  CommentForm, BorrowBookForm
+from .forms import   BorrowBookForm, ReviewForm
 from django.contrib import messages 
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -52,7 +54,7 @@ class BuyNowView(View):
             request.user.account.balance -= book.borrowing_price
             request.user.account.save()
             book.buy_book = True
-            book.balace_after = request.user.accout.balance
+            book.balace_after = request.user.account.balance
             book.save()
             BorroBook.objects.create(user=user, book=book)
             return redirect('details', id=id)
@@ -84,12 +86,6 @@ class ReturnView(View):
 
  
 
- 
- 
-
-
-
- 
 
 class DetailbookView(DetailView):
     model =  Book
@@ -97,11 +93,12 @@ class DetailbookView(DetailView):
     template_name = 'book_details.html'
 
     def post(self, request, *args, **kwargs):
-        comment_form =CommentForm(data=self.request.POST)
+        comment_form =ReviewForm(data=self.request.POST)
         post = self.get_object()
         if comment_form.is_valid():
             new_comment=comment_form.save(commit=False)
-            new_comment.post=post 
+            new_comment.book =post 
+            new_comment.user = request.user 
             new_comment.save()
         return self.get(request, *args, **kwargs)
 
@@ -109,48 +106,16 @@ class DetailbookView(DetailView):
         context = super().get_context_data(**kwargs)
         post = self.object   # post model er object  ekhane store korlam 
         comments = post.comments.all()
-        comment_form = CommentForm()
+        comment_form = ReviewForm()
         
         context['comments']  = comments
         context['comment_form'] = comment_form
         return context  
 
+ 
+ 
 
-
-
-# class DetailbookView(FormMixin, DetailView):
-#     model = Book
-#     template_name = 'book_detail.html'
-#     context_object_name = 'book'
-#     form_class = CommentForm
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['reviews'] = Review.objects.filter(book=self.object)
-#         return context
-
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         form = self.get_form()
-#         if form.is_valid():
-#             return self.form_valid(form)
-#         else:
-#             return self.form_invalid(form)
-
-#     def form_valid(self, form):
-#         rating = form.cleaned_data['rating']
-#         comment = form.cleaned_data['comment']
-#         Review.objects.create(user=self.request.user, book=self.object, comment=comment)
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return self.request.path
-
-
-
-
-
-
+ 
 
 
  

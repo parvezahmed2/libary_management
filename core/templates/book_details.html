@@ -16,39 +16,41 @@
           <p>Category :  {{book.category.name}} </p>
           <p class="card-text">{{book.borrowing_price}}</p>
           <button><a href="{% url 'buy' id=book.id %}" class="btn btn-primary">Borron book</a></button>  
+            
           </div>
            
         </div>
       </div>
     </div>
 
+         
+  </div>
 
 
 
-    <div class="card m-2">
-        <h5 class="p-3">Total Comments: {{comments | length}}</h5>
-        <div class="card-body">
-            {% for cmt in comments %}
-             
-            <p>{{cmt.comment}}</p>
-            {% endfor %}
-        </div>
-      </div>
+  <div class="card m-2">
+    <h5 class="p-3">Total Comments: {{comments | length}}</h5>
+    <div class="card-body">
+        {% for cmt in comments %}
+         
+        <p>{{cmt.comment}}</p>
+        {% endfor %}
+    </div>
+  </div>
 
 
 
-    <div class="card m-2">
-       
-        <div class="card-body">
-            <form action=""  method="post" >
-                <h1>Add  Post page</h1>
-                {% csrf_token %}
-                {{comment_form | crispy}}
-                <button class="btn btn-warning">Submit</button>
-            
-            </form>
-        </div>
-      </div>
-
+<div class="card m-2">
+   
+    <div class="card-body">
+        <form action=""  method="post" >
+            <h1>Add  Post page</h1>
+            {% csrf_token %}
+            {{comment_form | crispy}}
+            <button class="btn btn-warning">Submit</button>
+        
+        </form>
+    </div>
+  </div>
 
 {% endblock %}

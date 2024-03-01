@@ -36,6 +36,7 @@ class BorroBook(models.Model):
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='comments')
+    rating = models.IntegerField(default=0)
     comment = models.TextField(  null=True)
 
 
